@@ -1,0 +1,139 @@
+/*
+Navicat Oracle Data Transfer
+Oracle Client Version : 10.2.0.5.0
+
+Source Server         : 95zhengshi
+Source Server Version : 110200
+Source Host           : 172.18.98.95:1521
+Source Schema         : V5
+
+Target Server Type    : ORACLE
+Target Server Version : 110200
+File Encoding         : 65001
+
+Date: 2021-02-01 09:05:26
+*/
+
+
+-- ----------------------------
+-- Table structure for TEMP_NUMBER10
+-- ----------------------------
+DROP TABLE "V5"."TEMP_NUMBER10";
+CREATE TABLE "V5"."TEMP_NUMBER10" (
+"ID" VARCHAR2(100 BYTE) NULL ,
+"STATUS" VARCHAR2(6 BYTE) NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+
+-- ----------------------------
+-- Table structure for TEMP_NUMBER20
+-- ----------------------------
+DROP TABLE "V5"."TEMP_NUMBER20";
+CREATE TABLE "V5"."TEMP_NUMBER20" (
+"ID" VARCHAR2(200 BYTE) NOT NULL ,
+"SUBJECT" VARCHAR2(255 BYTE) NULL ,
+"DOC_MARK" VARCHAR2(255 BYTE) NULL ,
+"ISSUER" VARCHAR2(255 BYTE) NULL ,
+"SEND_DEPARTMENT" VARCHAR2(255 BYTE) NULL ,
+"PACK_DATE" VARCHAR2(50 BYTE) NULL ,
+"STATUS" VARCHAR2(50 BYTE) NULL ,
+"CREATE_TIME" VARCHAR2(50 BYTE) NULL ,
+"YEAR" VARCHAR2(50 BYTE) NULL ,
+"EDOC_TYPE" VARCHAR2(50 BYTE) NULL ,
+"ORGANIZER" VARCHAR2(400 BYTE) NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+
+-- ----------------------------
+-- Table structure for TEMP_NUMBER30
+-- ----------------------------
+DROP TABLE "V5"."TEMP_NUMBER30";
+CREATE TABLE "V5"."TEMP_NUMBER30" (
+"ID" VARCHAR2(64 BYTE) NULL ,
+"C_MIDRECID" VARCHAR2(64 BYTE) NULL ,
+"C_FILETITLE" VARCHAR2(512 BYTE) NULL ,
+"C_FTPFILEPATH" VARCHAR2(512 BYTE) NULL ,
+"C_TYPE" VARCHAR2(64 BYTE) NULL ,
+"I_SIZE" VARCHAR2(64 BYTE) NULL ,
+"META_TYPE" VARCHAR2(20 BYTE) NULL ,
+"STATUS" VARCHAR2(6 BYTE) NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+
+-- ----------------------------
+-- Table structure for TEMP_NUMBER40
+-- ----------------------------
+DROP TABLE "V5"."TEMP_NUMBER40";
+CREATE TABLE "V5"."TEMP_NUMBER40" (
+"MODULE_ID" VARCHAR2(50 BYTE) NULL ,
+"CONTENT" CLOB NULL ,
+"CONTENT_TYPE" VARCHAR2(50 BYTE) NULL ,
+"SORT" VARCHAR2(50 BYTE) NULL ,
+"ID" VARCHAR2(50 BYTE) NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+
+-- ----------------------------
+-- Table structure for TEMP_NUMBER50
+-- ----------------------------
+DROP TABLE "V5"."TEMP_NUMBER50";
+CREATE TABLE "V5"."TEMP_NUMBER50" (
+"ID" VARCHAR2(200 BYTE) NOT NULL ,
+"SUBJECT" VARCHAR2(255 BYTE) NULL ,
+"DOC_MARK" VARCHAR2(255 BYTE) NULL ,
+"ISSUER" VARCHAR2(255 BYTE) NULL ,
+"SEND_DEPARTMENT" VARCHAR2(255 BYTE) NULL ,
+"PACK_DATE" VARCHAR2(50 BYTE) NULL ,
+"STATUS" VARCHAR2(50 BYTE) NULL ,
+"CREATE_TIME" VARCHAR2(50 BYTE) NULL ,
+"YEAR" VARCHAR2(50 BYTE) NULL ,
+"EDOC_TYPE" VARCHAR2(50 BYTE) NULL ,
+"ORGANIZER" VARCHAR2(400 BYTE) NULL 
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+
+-- ----------------------------
+-- Indexes structure for table TEMP_NUMBER10
+-- ----------------------------
+CREATE INDEX "V5"."TEMP10_INDEX"
+ON "V5"."TEMP_NUMBER10" ("ID" ASC)
+LOGGING
+VISIBLE;
+
+-- ----------------------------
+-- Checks structure for table TEMP_NUMBER20
+-- ----------------------------
+ALTER TABLE "V5"."TEMP_NUMBER20" ADD CHECK ("ID" IS NOT NULL);
+
+-- ----------------------------
+-- Indexes structure for table TEMP_NUMBER50
+-- ----------------------------
+CREATE INDEX "V5"."TEMP_NUMBER50_ID_INDEX"
+ON "V5"."TEMP_NUMBER50" ("ID" ASC)
+LOGGING
+VISIBLE;
+
+-- ----------------------------
+-- Checks structure for table TEMP_NUMBER50
+-- ----------------------------
+ALTER TABLE "V5"."TEMP_NUMBER50" ADD CHECK ("ID" IS NOT NULL);
