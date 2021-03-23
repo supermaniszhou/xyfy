@@ -1,4 +1,5 @@
-create or replace procedure pro_xyfy4(flag number) IS
+CREATE OR REPLACE
+procedure pro_xyfy4(flag number) IS
 BEGIN
     if (flag = 1) then
             begin
@@ -9,7 +10,7 @@ BEGIN
 
                 insert into temp_number40
 
-                select SS.module_id,SS.CONTENT,SS.content_type,SS.sort,SS.id from EDOC_SUMMARY es,
+                select SS.module_id,SS.CONTENT,SS.content_type,SS.sort,SS.id from (select * from EDOC_SUMMARY where HAS_ARCHIVE=1) es,
 (select c.id,s.module_id,c.content,c.content_type,s.sort from (
 select max(sort) sort,module_id from (select module_id,sort from CTP_CONTENT_ALL where CONTENT_TYPE in (10,30))  GROUP BY module_id
 ) s LEFT JOIN  CTP_CONTENT_ALL c on s.sort=c.sort and s.module_id=c.module_id ) ss where  ES.id=SS.MODULE_ID;
@@ -72,6 +73,7 @@ and a.id = b.MODULE_ID
 
             -- 添加新增文单的功能
             insert into TEMP_NUMBER30
+						select ss.* from (
               select id,C_MIDRECID,c_filetitle,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status from (
               select B.id,A.id C_MIDRECID,
               a.subject || '.html' c_filetitle,
@@ -89,7 +91,8 @@ and a.id = b.MODULE_ID
               SELECT  zall.* FROM  (select * from TEMP_NUMBER40 where  CONTENT_TYPE IN (10,30) ) zall
               ) B
               on B.MODULE_ID = A.Id and  A.has_archive = 1
-              where B.Id is not null ) cd where exists (select * from TEMP_NUMBER10 t where t.status='0' and CD.C_MIDRECID=t.id);
+              where B.Id is not null ) cd where exists (select * from TEMP_NUMBER10 t where t.status='0' and CD.C_MIDRECID=t.id) ) ss
+						where not exists (select * from TEMP_NUMBER30 t30 where ss.id=t30.id);
         exception
             when others then
                 ROLLBACK;
@@ -101,6 +104,7 @@ and a.id = b.MODULE_ID
         begin
 
             insert into TEMP_NUMBER30
+						select ss.* from (
               select id,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status from (
               select C.id, A.Id C_MIDRECID,
               C.Filename C_FILETITLE,
@@ -121,7 +125,8 @@ and a.id = b.MODULE_ID
               left join ctp_attachment C
               on b.MODULE_ID = c.att_reference
               where C.id is not null ) cd
-              where exists (select * from TEMP_NUMBER10 t where t.status='0' and CD.C_MIDRECID=t.id);
+              where exists (select * from TEMP_NUMBER10 t where t.status='0' and CD.C_MIDRECID=t.id)) ss
+						where not exists (select * from TEMP_NUMBER30 t30 where ss.id=t30.id);
 
         exception
             when others then

@@ -1,4 +1,5 @@
-create or replace procedure pro_xyfy3(flag number) IS
+CREATE OR REPLACE
+procedure pro_xyfy3(flag number) IS
 BEGIN
     if (flag = 1) then
             begin
@@ -139,6 +140,7 @@ insert into temp_number40
 
             -- 添加新增文单的功能
             insert into TEMP_NUMBER30
+						select ss.* from (
               select id,C_MIDRECID,c_filetitle,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status from (
               select B.id,A.id C_MIDRECID,
               a.subject || '.html' c_filetitle,
@@ -153,10 +155,13 @@ insert into temp_number40
               0 status
               from edoc_summary A
               left join (
-select zall.*,CF.MIME_TYPE,CF.id from (select to_number(content) content,MODULE_ID from temp_number40 where to_char(content) in (select to_char(id) from ctp_file) and CONTENT_TYPE in (41,42,43,44,45)
- ) zall,ctp_file cf where ZALL.CONTENT=CF.id) B
+							select zall.*,CF.MIME_TYPE,CF.id from (select to_number(content) content,MODULE_ID from temp_number40 where to_char(content) in (select to_char(id) from ctp_file) and CONTENT_TYPE in (41,42,43,44,45)
+							 ) zall,ctp_file cf where ZALL.CONTENT=CF.id) B
               on B.MODULE_ID = A.Id and  A.has_archive = 1
-              where B.Id is not null ) cd where exists (select * from TEMP_NUMBER10 t where t.status='0' and cd.C_MIDRECID=t.id);
+              where B.Id is not null ) cd where exists (select * from TEMP_NUMBER10 t where t.status='0' and cd.C_MIDRECID=t.id)) ss
+						where not exists (select * from TEMP_NUMBER30 t30 where ss.id=t30.id);
+
+
         exception
             when others then
                 ROLLBACK;
@@ -168,8 +173,8 @@ select zall.*,CF.MIME_TYPE,CF.id from (select to_number(content) content,MODULE_
         begin
 
             insert into TEMP_NUMBER30
-
-select id,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status from (
+						select ss.* from (
+							select id,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status from (
               select C.id, A.Id C_MIDRECID,
               C.Filename C_FILETITLE,
               '/upload/' ||
@@ -183,12 +188,13 @@ select id,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,status fr
               0 status
               from edoc_summary A
               left join (select zall.*,CF.MIME_TYPE,CF.id from (select to_number(content) content,MODULE_ID from CTP_CONTENT_ALL where to_char(content) in (select to_char(id) from ctp_file) and CONTENT_TYPE in (41,42,43,44,45)
- ) zall,ctp_file cf where ZALL.CONTENT=CF.id) B
+							) zall,ctp_file cf where ZALL.CONTENT=CF.id) B
               on A.Id = B.MODULE_ID and  A.has_archive = 1
               left join ctp_attachment C
               on b.MODULE_ID = c.att_reference
               where C.id is not null ) cd
-              where exists(select * from TEMP_NUMBER10 t where t.status='0' and cd.C_MIDRECID=t.id);
+              where exists(select * from TEMP_NUMBER10 t where t.status='0' and cd.C_MIDRECID=t.id)) ss
+						where not exists (select * from TEMP_NUMBER30 t30 where ss.id=t30.id);
 
         exception
             when others then
