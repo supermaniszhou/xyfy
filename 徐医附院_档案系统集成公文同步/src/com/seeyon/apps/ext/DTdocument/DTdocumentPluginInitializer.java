@@ -13,7 +13,8 @@ public class DTdocumentPluginInitializer extends AbstractSystemInitializer {
 
     @Override
     public void initialize() {
-        final long PERIOD_DAY = 24 * 60 * 60 * 1000;
+//        final long PERIOD_DAY = 24 * 60 * 60 * 1000;
+        final long PERIOD_DAY = 10 * 60 * 1000;
         SyncDataTask dataTask = new SyncDataTask();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12); //凌晨1点
@@ -24,7 +25,9 @@ public class DTdocumentPluginInitializer extends AbstractSystemInitializer {
         if (date.before(new Date())) {
             date = this.addDay(date, 1);
         }
-        TimerHolder.newTimer(dataTask, date, PERIOD_DAY);
+//        TimerHolder.newTimer(dataTask, date, PERIOD_DAY);
+        //zhou:测试
+//        TimerHolder.newTimer(dataTask, PERIOD_DAY);
         System.out.println("启动DTdocument插件");
 
     }

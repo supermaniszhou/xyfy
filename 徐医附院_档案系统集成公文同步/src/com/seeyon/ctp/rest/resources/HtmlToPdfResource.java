@@ -23,7 +23,6 @@ import java.util.*;
 public class HtmlToPdfResource extends BaseResource {
 
     private EdocManager edocManager = (EdocManager) AppContext.getBean("edocManager");
-    private EdocFormManager edocFormManager = (EdocFormManager) AppContext.getBean("edocFormManager");
 
     private static final String EXPORT_EDOC_ALL = "0";
     private static final String EXPORT_EDOC_FORM = "1";
@@ -53,15 +52,12 @@ public class HtmlToPdfResource extends BaseResource {
         String summaryId = (String) param.get("summaryid");
         String folder = (String) param.get("folder");
         String exportType = (String) param.get("exportType");
-        List<Long> bodyIds = new ArrayList<Long>();
-        List<V3XFile> v3xList = new ArrayList<V3XFile>();
         Map<String, Object> map = new HashMap<String, Object>();
         try {
             if ((null != summaryId && !"".equals(summaryId)) && (null != folder && !"".equals(folder))) {
                 if (null == exportType) {
                     exportType = EXPORT_EDOC_ALL;
                 }
-                List<Long> fileList = new ArrayList<Long>();
                 EdocSummary es = edocManager.getEdocSummaryById(Long.parseLong(summaryId), true);
                 if (null != es) {
                     boolean isNewGovdoc = true;
@@ -71,10 +67,8 @@ public class HtmlToPdfResource extends BaseResource {
                     // 根据导出类型导出文单、正文(含花脸)
                     if (EXPORT_EDOC_FORM.equals(exportType)) {
                         if (isNewGovdoc) {
-//                            edocFormManager.writeForm2File2(Long.parseLong(summaryId), folder);
                             FormParseTool.writeForm2File2(Long.parseLong(summaryId), folder);
                         } else {
-//                            edocFormManager.writeForm2File(Long.parseLong(summaryId), folder);
                             FormParseTool.writeForm2File(Long.parseLong(summaryId), folder);
 
                         }

@@ -5,27 +5,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac16f7c2-9d1f-451a-bd87-9fcdc05aeb19" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/qaplug_profiles.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/$PRODUCT_WORKSPACE_FILE$" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/$PROJECT_FILE$" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/deployment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/qaplug_profiles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/webServers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/.idea/档案同步_使用监听事件生成文单附件-20210209.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/controller/ExportController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/listener/GovdocOperationListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/listener/ProductHtml.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/po/OptionPO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/util/FormParseTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/ctp/rest/resources/HtmlToPdfResource.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/v3x/edoc/util/ExEdocOpinionDisplayUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DTdocument.iml" beforeDir="false" afterPath="$PROJECT_DIR$/DTdocument.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/PRO_XYFY3-2020-09-07.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/PRO_XYFY3.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/PRO_XYFY3_new.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/PRO_XYFY4.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/PRO_XYFY4_new.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/old.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/sqljdbc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/sqljdbc4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/存储过程.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/数据表.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql文件/注意事项" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.class" beforeDir="false" afterPath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/quartz/SyncDataTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/apps/ext/DTdocument/quartz/SyncDataTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/classes/com/seeyon/v3x/services/document/impl/DocumentFactoryImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/seeyon/WEB-INF/classes/law/docPlugin.properties" beforeDir="false" afterPath="$PROJECT_DIR$/seeyon/WEB-INF/classes/law/docPlugin.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql文件-废弃/PRO_XYFY4_new.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql文件-废弃/PRO_XYFY4_new.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/quartz/SyncDataTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/quartz/SyncDataTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/util/FormParseTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/util/FormParseTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/seeyon/ctp/rest/resources/HtmlToPdfResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/seeyon/ctp/rest/resources/HtmlToPdfResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/law/docPlugin.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/law/docPlugin.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-controller.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-controller.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/seeyon/WEB-INF/cfgHome/plugin/DTdocument/spring/spring-DTdocument-plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/ext/DTdocument/DTdocumentPluginInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../档案同步_使用监听事件生成文单附件-20210209/src/com/seeyon/apps/govdoc/listener/GovdocWorkflowEventListener.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +91,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="F:/致远OA/致远资料/0_致远源码/7.1SP1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -391,7 +409,12 @@
       <workItem from="1612148758828" duration="3494000" />
       <workItem from="1612166889091" duration="1516000" />
       <workItem from="1612340529807" duration="600000" />
-      <workItem from="1612855530264" duration="3421000" />
+      <workItem from="1612855530264" duration="3561000" />
+      <workItem from="1614738158901" duration="649000" />
+      <workItem from="1616403088892" duration="2813000" />
+      <workItem from="1616459022643" duration="14249000" />
+      <workItem from="1616479485660" duration="2135000" />
+      <workItem from="1616489350829" duration="3232000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1586828382127</created>
@@ -680,7 +703,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612142404813</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="update">
+      <created>1616403328102</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1616403328102</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -719,24 +749,29 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java</url>
-          <line>323</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://F:/Seeyon/A87.1_sp1_202002/ApacheJetspeed/webapps/seeyon/WEB-INF/lib/seeyon-apps-soap.jar!/com/seeyon/v3x/services/document/impl/DocumentFactoryImpl.class</url>
           <line>336</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java</url>
-          <line>234</line>
+          <line>146</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java</url>
-          <line>187</line>
+          <line>94</line>
           <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/controller/DTdocumentController.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/seeyon/apps/ext/DTdocument/manager/SyncOrgData.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

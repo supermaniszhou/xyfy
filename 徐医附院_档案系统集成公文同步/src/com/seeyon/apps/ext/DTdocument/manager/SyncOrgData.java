@@ -1,5 +1,8 @@
 package com.seeyon.apps.ext.DTdocument.manager;
 
+import com.seeyon.apps.ext.DTdocument.util.ReadConfigTools;
+import com.seeyon.client.CTPRestClient;
+import com.seeyon.client.CTPServiceClientManager;
 import com.seeyon.ctp.common.AppContext;
 import com.seeyon.ctp.common.exceptions.BusinessException;
 import com.seeyon.ctp.common.filemanager.manager.FileManager;
@@ -17,9 +20,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Administrator on 2019-9-10.
@@ -38,99 +40,6 @@ public class SyncOrgData {
     }
 
     public SyncOrgData() {
-    }
-
-    public void restartWriteHtml(String classPath, Connection connection) throws SQLException {
-        //获取系统路径
-        String sql = "select id,edocSummaryId,subject,YEAR,MONTH,DAY from (SELECT A . affairId AS ID,A.edocSummaryId,A .subject AS subject,  " +
-                "SUBSTR (TO_CHAR (A .create_time, 'yyyy-mm-dd'),0,4) YEAR,  " +
-                "SUBSTR (TO_CHAR (A .create_time, 'yyyy-mm-dd'),6,2) MONTH,  " +
-                "SUBSTR (TO_CHAR (A .create_time, 'yyyy-mm-dd'),9,2) DAY FROM (  " +
-                "select * from (SELECT c.ID affairId,E.ID edocSummaryId,E.SUBJECT,E.create_time,E .has_archive FROM CTP_AFFAIR c,  " +
-                "(select s.* from (select * from EDOC_SUMMARY where has_archive=1) s) E WHERE c.OBJECT_ID = E . ID AND c.ARCHIVE_ID IS NOT NULL   " +
-                "AND E .has_archive = 1) c  ) A WHERE A .has_archive = 1 ) ss";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            LocalDate localDate = LocalDate.now();
-            String syear = Integer.toString(localDate.getYear());
-            String p = classPath.substring(0, classPath.indexOf(syear));
-//            linux
-            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-            perms.add(PosixFilePermission.OWNER_READ);//设置所有者的读取权限
-            perms.add(PosixFilePermission.OWNER_WRITE);//设置所有者的写权限
-            perms.add(PosixFilePermission.OWNER_EXECUTE);//设置所有者的执行权限
-            perms.add(PosixFilePermission.GROUP_READ);//设置组的读取权限
-            perms.add(PosixFilePermission.GROUP_EXECUTE);//设置组的读取权限
-            perms.add(PosixFilePermission.OTHERS_READ);//设置其他的读取权限
-            perms.add(PosixFilePermission.OTHERS_EXECUTE);//设置其他的读取权限
-            ps = connection.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            String opinionSql = "select case attribute when 2 then '【'||'同意'||'】' when  3 then '【'||'不同意'||'】' else '' end attribute,policy,department_name,create_time,content,(select name from org_member where id= s.create_user_id) create_user_id from (select * from edoc_opinion where edoc_id=?) s";
-            ResultSet opinionSet = null;
-            PreparedStatement opinionPs = null;
-//          在这里初始化业务层实现类
-            DocumentFactory df=null;
-            String[] htmlContent = null;
-            String sPath = "";
-            while (rs.next()) {
-                df = new DocumentFactoryImpl();
-                opinionPs = connection.prepareStatement(opinionSql);
-                opinionPs.setString(1, rs.getString("edocSummaryId"));
-                opinionSet = opinionPs.executeQuery();
-                String opinion = getJsString(opinionSet);
-
-                htmlContent = df.exportOfflineEdocModel(Long.parseLong(rs.getString("id")));
-
-                sPath = p + rs.getString("year") + File.separator + rs.getString("month") + File.separator + rs.getString("day") + File.separator + rs.getString("edocSummaryId") + "";
-                File f = new File(sPath);
-                //linux设置文件和文件夹的权限
-                Path pathParent = Paths.get(f.getParentFile().getAbsolutePath());
-                Path pathDest = Paths.get(f.getAbsolutePath());
-                Files.setPosixFilePermissions(pathParent, perms);//修改文件夹路径的权限
-
-                File parentfile = f.getParentFile();
-                if (!parentfile.exists()) {
-                    parentfile.mkdirs();
-                }
-                parentfile.setWritable(true, false);
-                if (!f.exists()) {
-                    f.createNewFile();
-                }
-                f.setWritable(true, false);
-                //出错原因：下面这句话设置文件的权限必须在文件创建以后再修改权限，否则会报NoSuchFoundException
-                Files.setPosixFilePermissions(pathDest, perms);//修改图片文件的权限
-
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(f);
-                    String msg = htmlContent[1] + " " + opinion;
-                    fos.write(msg.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    logger.info("向文件中写入内容出错了:" + e.getMessage());
-                } finally {
-                    fos.close();
-                    if (null != opinionSet) {
-                        opinionSet.close();
-                    }
-                    if (null != opinionPs) {
-                        opinionPs.close();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != rs) {
-                rs.close();
-            }
-            if (null != ps) {
-                ps.close();
-            }
-        }
-
     }
 
     /**
@@ -170,7 +79,6 @@ public class SyncOrgData {
                     ") A WHERE A .has_archive = 1 ) ss where exists (SELECT * FROM TEMP_NUMBER10 t where 1=1 and SS.EDOCSUMMARYID=t.ID)";
             executeJdbc(connection, "4", sql10, spath);
 
-            restartWriteHtml(spath, connection);
         } catch (Exception e) {
             logger.info("同步公文出错了：" + e.getMessage());
             e.printStackTrace();
@@ -182,7 +90,6 @@ public class SyncOrgData {
             }
         }
     }
-
 
     public void executeJdbc(Connection connection, String type, String sql, String classPath) {
         Statement statement = null;
@@ -209,44 +116,41 @@ public class SyncOrgData {
             statement = connection.createStatement();
             rs = statement.executeQuery(sql);
 
-            String[] htmlContent = null;
             String sPath = "";
 
             LocalDate localDate = LocalDate.now();
             String syear = Integer.toString(localDate.getYear());
             String p = classPath.substring(0, classPath.indexOf(syear));
 //            linux
-            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-            perms.add(PosixFilePermission.OWNER_READ);//设置所有者的读取权限
-            perms.add(PosixFilePermission.OWNER_WRITE);//设置所有者的写权限
-            perms.add(PosixFilePermission.OWNER_EXECUTE);//设置所有者的执行权限
-            perms.add(PosixFilePermission.GROUP_READ);//设置组的读取权限
-            perms.add(PosixFilePermission.GROUP_EXECUTE);//设置组的读取权限
-            perms.add(PosixFilePermission.OTHERS_READ);//设置其他的读取权限
-            perms.add(PosixFilePermission.OTHERS_EXECUTE);//设置其他的读取权限
+//            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+//            perms.add(PosixFilePermission.OWNER_READ);//设置所有者的读取权限
+//            perms.add(PosixFilePermission.OWNER_WRITE);//设置所有者的写权限
+//            perms.add(PosixFilePermission.OWNER_EXECUTE);//设置所有者的执行权限
+//            perms.add(PosixFilePermission.GROUP_READ);//设置组的读取权限
+//            perms.add(PosixFilePermission.GROUP_EXECUTE);//设置组的读取权限
+//            perms.add(PosixFilePermission.OTHERS_READ);//设置其他的读取权限
+//            perms.add(PosixFilePermission.OTHERS_EXECUTE);//设置其他的读取权限
 
             String insertSql = "insert into TEMP_NUMBER30(ID,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,STATUS) values(?,?,?,?,?,?,?,?)";
-            String opinionSql = "select case attribute when 2 then '【'||'同意'||'】' when  3 then '【'||'不同意'||'】' else '' end attribute,policy,department_name,create_time,content,(select name from org_member where id= s.create_user_id) create_user_id from (select * from edoc_opinion where edoc_id=?) s";
-            ResultSet opinionSet = null;
-            PreparedStatement opinionPs = null;
+            String querySql = "select id from TEMP_NUMBER30 where id=?";
 //          在这里初始化业务层实现类
-            DocumentFactory df = null;
+            String oaUrl = ReadConfigTools.getInstance().getString("oa.url");
+            String rest = ReadConfigTools.getInstance().getString("oa.rest");
+            String restPwd = ReadConfigTools.getInstance().getString("oa.rest.pwd");
+            String bindUserInfo = ReadConfigTools.getInstance().getString("oa.rest.bindUser");
+            CTPServiceClientManager clientManager = CTPServiceClientManager.getInstance(oaUrl);
+            CTPRestClient client = clientManager.getRestClient();
+            client.authenticate(rest, restPwd);
+            client.bindUser(bindUserInfo);
 
+            Map formMap = null;
             while (rs.next()) {
-                df = new DocumentFactoryImpl();
-                opinionPs = connection.prepareStatement(opinionSql);
-                opinionPs.setString(1, rs.getString("edocSummaryId"));
-                opinionSet = opinionPs.executeQuery();
-                String opinion = getJsString(opinionSet);
-
-                htmlContent = df.exportOfflineEdocModel(Long.parseLong(rs.getString("id")));
-
                 sPath = p + rs.getString("year") + File.separator + rs.getString("month") + File.separator + rs.getString("day") + File.separator + rs.getString("edocSummaryId") + "";
                 File f = new File(sPath);
                 //linux设置文件和文件夹的权限
                 Path pathParent = Paths.get(f.getParentFile().getAbsolutePath());
                 Path pathDest = Paths.get(f.getAbsolutePath());
-                Files.setPosixFilePermissions(pathParent, perms);//修改文件夹路径的权限
+//                Files.setPosixFilePermissions(pathParent, perms);//修改文件夹路径的权限
 
                 File parentfile = f.getParentFile();
                 if (!parentfile.exists()) {
@@ -259,25 +163,13 @@ public class SyncOrgData {
                 }
                 f.setWritable(true, false);
                 //出错原因：下面这句话设置文件的权限必须在文件创建以后再修改权限，否则会报NoSuchFoundException
-                Files.setPosixFilePermissions(pathDest, perms);//修改图片文件的权限
+//                Files.setPosixFilePermissions(pathDest, perms);//修改图片文件的权限
 
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(f);
-                    String msg = htmlContent[1] + " " + opinion;
-                    fos.write(msg.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    logger.info("向文件中写入内容出错了:" + e.getMessage());
-                } finally {
-                    fos.close();
-                    if (null != opinionSet) {
-                        opinionSet.close();
-                    }
-                    if (null != opinionPs) {
-                        opinionPs.close();
-                    }
-                }
+                formMap = new HashMap();
+                formMap.put("summaryid", rs.getString("edocSummaryId") + "");
+                formMap.put("folder", p + rs.getString("year") + File.separator + rs.getString("month") + File.separator + rs.getString("day") + File.separator);
+                formMap.put("exportType", "1");
+                String info = client.post("formHtml/productHtml", formMap, String.class);
 
                 if (type.equals("4")) {
                     LocalDate date = LocalDate.now();
@@ -307,20 +199,26 @@ public class SyncOrgData {
                     } finally {
                         fos2.close();
                     }
-                    ps = connection.prepareStatement(insertSql);
+                    ResultSet resultSet = null;
+                    ps = connection.prepareStatement(querySql);
                     ps.setString(1, rs.getString("edocSummaryId") + prefix);
-                    ps.setString(2, rs.getString("edocSummaryId"));
-                    ps.setString(3, rs.getString("edocSummaryId") + prefix + ".html");
-                    ps.setString(4, sPath2);
-                    ps.setString(5, "正文");
-                    ps.setString(6, f.length() + "");
-                    ps.setString(7, ".html");
-                    ps.setString(8, "0");
-                    ps.executeUpdate();
+                    resultSet = ps.executeQuery();
+                    if (!(resultSet.next())) {
+                        ps = connection.prepareStatement(insertSql);
+                        ps.setString(1, rs.getString("edocSummaryId") + prefix);
+                        ps.setString(2, rs.getString("edocSummaryId"));
+                        ps.setString(3, rs.getString("edocSummaryId") + prefix + ".html");
+                        ps.setString(4, sPath2);
+                        ps.setString(5, "正文");
+                        ps.setString(6, f.length() + "");
+                        ps.setString(7, ".html");
+                        ps.setString(8, "0");
+                        ps.executeUpdate();
+                    }
                 }
 
             }
-        } catch (SQLException | ServiceException | IOException sbsi) {
+        } catch (SQLException | IOException sbsi) {
             sbsi.printStackTrace();
             logger.info("同步公文sql出错了：" + sbsi.getMessage());
         } catch (Exception e) {
@@ -343,22 +241,6 @@ public class SyncOrgData {
 
     }
 
-    public String getJsString(ResultSet set) throws SQLException {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<script type=\"text/javascript\">");
-        while (set.next()) {
-            String attribute = set.getString("attribute") == null ? "" : set.getString("attribute");
-            String content = set.getString("content") == null ? "" : set.getString("content");
-            String deptName = set.getString("department_name") == null ? "" : set.getString("department_name");
-            String userName = set.getString("create_user_id") == null ? "" : set.getString("create_user_id");
-            String createTime = set.getString("create_time").substring(0, set.getString("create_time").lastIndexOf(":"));
-            String val = attribute + "  " + content + "  " + deptName + "  " + userName + "  " + createTime;
-            sb.append("document.getElementById(\"" + set.getString("policy") + "\").innerHTML =\"" + val + "\";");
-
-        }
-        sb.append("</script>");
-        return sb.toString();
-    }
 
     public String getZwData(Connection connection, String summaryId) {
         Statement statement = null;
@@ -402,95 +284,4 @@ public class SyncOrgData {
     }
 
 
-//    /**
-//     * 复制OA正文
-//     */
-//    public void copyEdoc2() {
-//        String str = "";
-//        Statement st = null;
-//        ResultSet rs = null;
-//        Connection conn = DbConnUtil.getInstance().getConnection();
-//        try {
-////            str = " select '/upload/' || substr(to_char(C.Create_Date, 'yyyy-mm-dd'), 0, 4) || '/' ||  substr(to_char(C.Create_Date, 'yyyy-mm-dd'), 6, 2) || '/' ||  substr(to_char(C.Create_Date, 'yyyy-mm-dd'), 9, 2) || '/' || C.Filename || '.doc' as C_FTPFILEPATH  from edoc_summary A left join (select * from edoc_body where content_type <> 'HTML') B on B.Edoc_Id = A.Id left join ctp_file C on to_char(B.content) = C.Id  where a.has_archive = 1 and B.Id is not null  and a.id in (select id from TEMP_NUMBER10)";
-//            str = "SELECT '/upload/'||SUBSTR(TO_CHAR(C.Create_Date,'yyyy-mm-dd'),0,4)||'/'||SUBSTR(TO_CHAR(C.Create_Date,'yyyy-mm-dd'),6,2)||'/'||SUBSTR(TO_CHAR(C.Create_Date,'yyyy-mm-dd'),9,2)||'/'||C.Filename||'.doc' AS C_FTPFILEPATH " +
-//                    "FROM edoc_summary A LEFT JOIN (SELECT ZC.CONTENT,ZC.MODULE_ID FROM CTP_CONTENT_ALL zC,CTP_FILE F WHERE TO_NUMBER(zC.CONTENT) = F.ID AND zC.CONTENT_TYPE NOT IN (10)) B ON B.module_id = A . ID " +
-//                    "LEFT JOIN ctp_file C ON TO_CHAR (B. CONTENT) = C. ID WHERE A .has_archive = 1 AND A . ID IN (SELECT ID FROM TEMP_NUMBER10)";
-//            st = conn.createStatement();
-//            rs = st.executeQuery(str);
-//            String sPath = "";
-//            String sFilePath = "";
-//            String classPath = this.getClass().getResource("/").getPath();
-//            String p = classPath.substring(0, classPath.indexOf("ApacheJetspeed")).concat("base");
-//            while (rs.next()) {
-//                sPath = rs.getString("C_FTPFILEPATH");
-//                sFilePath = sPath.substring(0, sPath.lastIndexOf("."));
-//                if ((new File(p + sFilePath)).exists()) {
-//                    FileUtil.copyFile(new File(p + sFilePath), new File(p + sPath));
-//                }
-//            }
-//        } catch (Exception var7) {
-//            var7.printStackTrace();
-//        } finally {
-//            try {
-//                rs.close();
-//                st.close();
-//                conn.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
-//
-//    /**
-//     * 复制OA附件
-//     */
-//    public void copyAttachment2() {
-//        String str = "";
-//        Statement st = null;
-//        ResultSet rs = null;
-//        Connection conn = DbConnUtil.getInstance().getConnection();
-//        try {
-//            str = " select '/upload/' || substr(to_char(C.createdate, 'yyyy-mm-dd'), 0, 4) || '/' ||  substr(to_char(C.createdate, 'yyyy-mm-dd'), 6, 2) || '/' ||  substr(to_char(C.createdate, 'yyyy-mm-dd'), 9, 2) || '/' ||  C.file_url || substr(C.Filename, instr(C.Filename, '.', -1, 1)) C_FTPFILEPATH   from edoc_summary A left join (SELECT ZC.CONTENT,ZC.MODULE_ID FROM CTP_CONTENT_ALL zC,CTP_FILE F WHERE TO_NUMBER(zC.CONTENT) = F.ID AND zC.CONTENT_TYPE NOT IN (10))  B on B.MODULE_ID = A.Id left join ctp_attachment C on b.MODULE_ID = c.att_reference  where a.has_archive = 1 and C.id is not null  and a.id in (select id from TEMP_NUMBER10)";
-//            st = conn.createStatement();
-//            rs = st.executeQuery(str);
-//            String sPath = "";
-//            String sFilePath = "";
-//            String classPath = this.getClass().getResource("/").getPath();
-//            String p = classPath.substring(0, classPath.indexOf("ApacheJetspeed")).concat("base");
-//
-//            while (rs.next()) {
-//                sPath = rs.getString("C_FTPFILEPATH");
-//                sFilePath = sPath.substring(0, sPath.lastIndexOf("."));
-//                if ((new File(p + sFilePath)).exists()) {
-//                    FileUtil.copyFile(new File(p + sFilePath), new File(p + sPath));
-//                }
-//            }
-//        } catch (Exception var7) {
-//            var7.printStackTrace();
-//        } finally {
-//            try {
-//                rs.close();
-//                st.close();
-//                conn.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
-//
-//    /**
-//     * 清空临时表的数据
-//     */
-//    public void clearTemporary() {
-//        String sql10 = "delete from temp_number10";
-//        String sql20 = "delete from temp_number20";
-//        String sql30 = "delete from temp_number30";
-//        String sql40 = "delete from temp_number40";
-//        DbConnUtil.getInstance().deleteSql(sql10);
-//        DbConnUtil.getInstance().deleteSql(sql20);
-//        DbConnUtil.getInstance().deleteSql(sql30);
-//        DbConnUtil.getInstance().deleteSql(sql40);
-//    }
 }

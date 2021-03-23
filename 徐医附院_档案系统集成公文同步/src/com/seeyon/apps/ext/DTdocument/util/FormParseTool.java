@@ -153,7 +153,8 @@ public class FormParseTool {
                 root += "/";
             }
 
-            String summaryRoot = root + summary.getId();
+//            String summaryRoot = root + summary.getId();
+            String summaryRoot = root;
 
             File sFolder = new File(summaryRoot);
             if (sFolder.exists()) {
@@ -166,7 +167,7 @@ public class FormParseTool {
             FormParseExtInfo extInfo = formatFormContent(summary, "");
 
             // 将文单写成HTML
-            File contentFile = new File(summaryRoot + "/form.html");
+            File contentFile = new File(summaryRoot + summary.getId() + "");
             FileUtils.writeStringToFile(contentFile, extInfo.getContent(), "utf-8");
 
         } catch (Exception e) {
@@ -203,18 +204,19 @@ public class FormParseTool {
                 root += "/";
             }
 
-            String summaryRoot = root + edocSummary.getId();
+            String summaryRoot = root;
 
-            File sFolder = new File(summaryRoot);
-            if (sFolder.exists()) {
-                FileUtils.cleanDirectory(sFolder);
-            }
+            //zhou:这个是清空文件夹下的所有文件
+//            File sFolder = new File(summaryRoot);
+//            if (sFolder.exists()) {
+//                FileUtils.cleanDirectory(sFolder);
+//            }
             // 创建文件夹
 
             FormParseExtInfo extInfo = formatFormContent2(edocSummary, "", "");
 
             // 将文单写成HTML
-            File contentFile = new File(summaryRoot + "/form.html");
+            File contentFile = new File(summaryRoot + "" + summaryId.toString());
             FileUtils.writeStringToFile(contentFile, extInfo.getContent(), "utf-8");
 
         } catch (Exception e) {

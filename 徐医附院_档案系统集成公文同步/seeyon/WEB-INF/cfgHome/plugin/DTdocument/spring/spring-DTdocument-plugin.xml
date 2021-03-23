@@ -3,4 +3,5 @@
 <beans default-autowire="byName">
     <bean name="DTdocument_Initializer" class="com.seeyon.apps.ext.DTdocument.DTdocumentPluginInitializer"/>
     <bean name="syncDataTask" class="com.seeyon.apps.ext.DTdocument.quartz.SyncDataTask"/>
+    <bean id="htmlToPdfResource" class="com.seeyon.ctp.rest.resources.HtmlToPdfResource"/>
 </beans>

@@ -21,9 +21,10 @@ public class SyncDataTask implements Runnable {
          * 同步公文
          */
         try {
+            System.out.println("开始了吗--------------------------");
             SyncOrgData.getInstance().syncSummary();
             WriteMiddleData.getInstance().batchSqlByType();
-            ClearTemp40.getInstance().clearTableData();
+//            ClearTemp40.getInstance().clearTableData();
         } catch (SQLException e) {
             e.printStackTrace();
         }
