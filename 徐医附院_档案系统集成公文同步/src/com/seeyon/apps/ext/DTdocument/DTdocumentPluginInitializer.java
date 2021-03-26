@@ -14,7 +14,7 @@ public class DTdocumentPluginInitializer extends AbstractSystemInitializer {
     @Override
     public void initialize() {
 //        final long PERIOD_DAY = 24 * 60 * 60 * 1000;
-        final long PERIOD_DAY = 10 * 60 * 1000;
+        final long PERIOD_DAY = 5 * 60 * 1000;
         SyncDataTask dataTask = new SyncDataTask();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12); //凌晨1点

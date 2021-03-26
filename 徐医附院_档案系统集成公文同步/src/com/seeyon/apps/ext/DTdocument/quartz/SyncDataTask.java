@@ -3,6 +3,7 @@ package com.seeyon.apps.ext.DTdocument.quartz;
 import com.seeyon.apps.ext.DTdocument.manager.ClearTemp40;
 import com.seeyon.apps.ext.DTdocument.manager.SyncOrgData;
 import com.seeyon.apps.ext.DTdocument.manager.WriteMiddleData;
+import com.seeyon.apps.ext.DTdocument.util.OperationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +23,7 @@ public class SyncDataTask implements Runnable {
          */
         try {
             System.out.println("开始了吗--------------------------");
-            SyncOrgData.getInstance().syncSummary();
-            WriteMiddleData.getInstance().batchSqlByType();
-//            ClearTemp40.getInstance().clearTableData();
+            OperationUtil.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }

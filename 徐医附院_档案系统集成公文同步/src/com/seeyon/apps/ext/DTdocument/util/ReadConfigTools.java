@@ -1,6 +1,6 @@
 package com.seeyon.apps.ext.DTdocument.util;
 
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -16,11 +16,18 @@ public class ReadConfigTools {
     private Properties properties;
 
     public ReadConfigTools() {
-        InputStream inputStream = ReadConfigTools.class.getClassLoader().getResourceAsStream("law/docPlugin.properties");
+        String path=Thread.currentThread().getContextClassLoader().getResource("law/docPlugin.properties").getPath();
+        File file=new File(path);
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         this.properties = new Properties();
         try {
-            this.properties.load(inputStream);
+            this.properties.load(new InputStreamReader(inputStream, "UTF-8"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

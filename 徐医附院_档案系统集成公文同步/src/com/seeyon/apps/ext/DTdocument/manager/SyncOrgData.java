@@ -1,5 +1,6 @@
 package com.seeyon.apps.ext.DTdocument.manager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.seeyon.apps.ext.DTdocument.util.ReadConfigTools;
 import com.seeyon.client.CTPRestClient;
 import com.seeyon.client.CTPServiceClientManager;
@@ -122,14 +123,14 @@ public class SyncOrgData {
             String syear = Integer.toString(localDate.getYear());
             String p = classPath.substring(0, classPath.indexOf(syear));
 //            linux
-//            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-//            perms.add(PosixFilePermission.OWNER_READ);//设置所有者的读取权限
-//            perms.add(PosixFilePermission.OWNER_WRITE);//设置所有者的写权限
-//            perms.add(PosixFilePermission.OWNER_EXECUTE);//设置所有者的执行权限
-//            perms.add(PosixFilePermission.GROUP_READ);//设置组的读取权限
-//            perms.add(PosixFilePermission.GROUP_EXECUTE);//设置组的读取权限
-//            perms.add(PosixFilePermission.OTHERS_READ);//设置其他的读取权限
-//            perms.add(PosixFilePermission.OTHERS_EXECUTE);//设置其他的读取权限
+            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+            perms.add(PosixFilePermission.OWNER_READ);//设置所有者的读取权限
+            perms.add(PosixFilePermission.OWNER_WRITE);//设置所有者的写权限
+            perms.add(PosixFilePermission.OWNER_EXECUTE);//设置所有者的执行权限
+            perms.add(PosixFilePermission.GROUP_READ);//设置组的读取权限
+            perms.add(PosixFilePermission.GROUP_EXECUTE);//设置组的读取权限
+            perms.add(PosixFilePermission.OTHERS_READ);//设置其他的读取权限
+            perms.add(PosixFilePermission.OTHERS_EXECUTE);//设置其他的读取权限
 
             String insertSql = "insert into TEMP_NUMBER30(ID,C_MIDRECID,C_FILETITLE,C_FTPFILEPATH,C_TYPE,I_SIZE,META_TYPE,STATUS) values(?,?,?,?,?,?,?,?)";
             String querySql = "select id from TEMP_NUMBER30 where id=?";
@@ -150,27 +151,37 @@ public class SyncOrgData {
                 //linux设置文件和文件夹的权限
                 Path pathParent = Paths.get(f.getParentFile().getAbsolutePath());
                 Path pathDest = Paths.get(f.getAbsolutePath());
-//                Files.setPosixFilePermissions(pathParent, perms);//修改文件夹路径的权限
+                Files.setPosixFilePermissions(pathParent, perms);//修改文件夹路径的权限
 
                 File parentfile = f.getParentFile();
                 if (!parentfile.exists()) {
                     parentfile.mkdirs();
                 }
                 parentfile.setWritable(true, false);
-//                Runtime.getRuntime().exec("chmod 777 -R "+ parentfile);
+                Runtime.getRuntime().exec("chmod 777 -R " + parentfile);
                 if (!f.exists()) {
                     f.createNewFile();
                 }
                 f.setWritable(true, false);
                 //出错原因：下面这句话设置文件的权限必须在文件创建以后再修改权限，否则会报NoSuchFoundException
-//                Files.setPosixFilePermissions(pathDest, perms);//修改图片文件的权限
+                Files.setPosixFilePermissions(pathDest, perms);//修改图片文件的权限
 
                 formMap = new HashMap();
                 formMap.put("summaryid", rs.getString("edocSummaryId") + "");
                 formMap.put("folder", p + rs.getString("year") + File.separator + rs.getString("month") + File.separator + rs.getString("day") + File.separator);
                 formMap.put("exportType", "1");
                 String info = client.post("formHtml/productHtml", formMap, String.class);
-
+                JSONObject json = JSONObject.parseObject(info);
+                boolean flag = (Boolean) json.get("success");
+                if (flag) {
+                    String updateNumber10 = "update temp_number10 set status = '1' where id =? ";
+                    try (PreparedStatement pUpNum10 = connection.prepareStatement(updateNumber10);) {
+                        pUpNum10.setString(1,rs.getString("edocSummaryId"));
+                        pUpNum10.executeUpdate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (type.equals("4")) {
                     LocalDate date = LocalDate.now();
                     String prefix = date.getYear() + "";
